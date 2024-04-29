@@ -127,7 +127,7 @@ jobs:
 
       - name: Clean Build Dependencies
         run: |
-          pnpm prune --prod
+          pnpm run clean
 
       - name: Create Production Artifact
         uses: actions/upload-artifact@v4
