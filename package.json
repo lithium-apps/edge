@@ -1,6 +1,6 @@
 {
   "name": "@lithium-apps/edge",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A NestJS module to use Edge.JS templating language.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
