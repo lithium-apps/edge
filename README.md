@@ -4,7 +4,6 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -40,6 +39,12 @@
     <li>
       <a href="#install-the-package">Install the package</a>
     </li>
+    <li>
+      <a href="#use-the-package">Use the package</a>
+    </li>
+    <li>
+      <a href="#utils-links">Utils links</a>
+    </li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -48,21 +53,27 @@
 
 ## About the project
 
+The Edge module is based on the idea of using Edge.JS templating within a Nest application. The main problem with using Edge.JS within Nest comes from the resolution of Edge in ESM. In this case, we're using a workaround to make use of the dynamic import.
+
+This module is built dynamically, allowing you to define a customized configuration for each use case. We recommend that you create a dedicated custom configuration file by importing a configuration object such as `edge.config.ts`.
+
+We welcome contributions and improvements to this module. Don't hesitate to submit features and improvements ;)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
 -   [![TypeScript][TypeScript]][TypeScript-url]
 -   [![NestJS][NestJS]][NestJS-url]
+-   [![EdgeJS][EdgeJS]][EdgeJS-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- USING PACKAGES -->
+<!-- INSTALL PACKAGE -->
 
 ## Install the package
 
-Components are organized in packages. Each package is a collection of components that are related to precise use case (Mobile or Web).
-Packages are published to GitHub registry and can be installed in any project.
+For now the package isn't published to npm, but you can install it from the GitHub registry and can be installed in any project.
 
 1.  You need to create a `.npmrc` file at the root of your project with the following content:
 
@@ -82,6 +93,77 @@ Packages are published to GitHub registry and can be installed in any project.
        ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- USE PACKAGE -->
+
+## Use the package
+
+1.  Create a configuration file for Edge.JS :
+
+    ```typescript
+    import { EdgeConfig } from '@lithium-apps/edge';
+
+    export const edgeConfig: EdgeConfig = {
+        mount: {
+            // Define all the named disk mount points
+            views: join(__dirname, 'path_to_views'),
+        },
+    
+        // You can set plugins here
+        plugins: [],
+    
+        // You can set globals here
+        globals: {},
+    
+        // Check other options in the EdgeConfig interface
+    };
+    ```
+
+2.  Import the `EdgeModule` in your application module:
+
+    ```typescript
+    import { Module } from '@nestjs/common';
+    import { EdgeModule } from '@lithium-apps/edge';
+    
+    import { edgeConfig } from './edge.config';
+    import { MyController } from './my.controller';
+
+    @Module({
+        imports: [
+            EdgeModule.forFeature(edgeConfig)
+        ],
+    
+        controllers: [MyController]
+    })
+    export class MyModule {}
+    ```
+
+3. Use the `@Render()` decorator in your controller:
+
+    ```typescript
+    import { Controller, Get } from '@nestjs/common';
+    import { EdgeService } from '@lithium-apps/edge';
+
+    @Controller()
+    export class MyController {
+   
+        @Get('/')
+        @Render('views::welcome') // Specify the view to render
+        async getHello() {
+            return { name: 'Kylian' }; // Data to pass to the view
+        }
+    }
+    ```
+
+<!-- UTILS LINKS -->
+
+## Utils links
+
+Here are a few useful links to help you use the module or learn more about it! Don't thank us, you'll sleep better :)
+
+-   [Edge.JS documentation](https://edgejs.dev/docs/introduction): The official documentation of the Edge.JS templating language.
+-   [NestJS documentation](https://docs.nestjs.com/): The official documentation of the NestJS framework.
 
 <!-- CONTACT -->
 
@@ -109,3 +191,5 @@ Packages are published to GitHub registry and can be installed in any project.
 [NestJS-url]: https://nestjs.com/
 [TypeScript]: https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
 [TypeScript-url]: https://www.typescriptlang.org/
+[EdgeJS]: .github/assets/edgejs_badge.svg
+[EdgeJS-url]: https://edgejs.dev/docs/introduction
