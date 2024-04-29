@@ -1,0 +1,205 @@
+name: "🚀 Build & Release / Publish"
+run-name: "🚀 [packages] Build & Release / Publish launched by @${{ github.actor }}"
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish the release ?'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  infos:
+    runs-on: ubuntu-latest
+    name: "📋 Infos"
+
+    outputs:
+      package-path: ${{ steps.set-package-path.outputs.package-path }}
+
+      artifact-name: ${{ steps.set-artifact-name.outputs.artifact-name }}
+      artifact-dir: build_artifact
+
+      organization: ${{ steps.set-organization.outputs.organization }}
+
+      name: ${{ steps.set-name.outputs.name }}
+      version: ${{ steps.set-package-version.outputs.version }}
+      publish: ${{ steps.set-publish.outputs.publish }}
+
+      tag-name: ${{ steps.set-tag-name.outputs.tag-name }}
+      release-name: ${{ steps.set-release-name.outputs.release-name }}
+      release-asset-name: ${{ steps.set-release-asset-name.outputs.release-asset-name }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Organization
+        id: set-organization
+        run: |
+          export organization_lower=$(echo ${{ github.repository_owner }} |  tr "[:upper:]" "[:lower:]")
+          echo "organization=$organization_lower" >> "$GITHUB_OUTPUT"
+
+      - name: Set Package Name
+        id: set-name
+        run: |
+          export name=${{ github.event.repository.name }}
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+
+      - name: Set Package Path
+        id: set-package-path
+        run: |
+          echo "package-path=./" >> "$GITHUB_OUTPUT"
+
+      - name: Set Publish
+        id: set-publish
+        run: |
+          export publish=${{ github.event.inputs.publish }}
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+
+      - name: Get Package Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+        with:
+          path: ${{ steps.set-package-path.outputs.package-path }}
+
+      - name: Set Package Version
+        id: set-package-version
+        run: |
+          echo "version=${{ steps.package-version.outputs.current-version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set Artifact Name
+        id: set-artifact-name
+        run: |
+          echo "artifact-name=build-${{ steps.set-name.outputs.name }}-${{ steps.set-package-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set Release Name
+        id: set-release-name
+        run: |
+          echo "release-name=@${{ steps.set-organization.outputs.organization }}/${{ steps.set-name.outputs.name }} - ${{ steps.set-package-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set Tag Name
+        id: set-tag-name
+        run: |
+          echo "tag-name=${{ steps.set-package-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set Release Asset Name
+        id: set-release-asset-name
+        run: |
+          echo "release-asset-name=${{ steps.set-name.outputs.name }}@${{ steps.set-package-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: infos
+    runs-on: ubuntu-latest
+    name: "🚧 Build"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: |
+          pnpm install
+
+      - name: Build Library
+        working-directory: ${{ needs.infos.outputs.package-path }}
+        run: |
+          pnpm run build
+
+      - name: Clean Build Dependencies
+        run: |
+          pnpm prune --prod
+
+      - name: Create Production Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.infos.outputs.artifact-name }}
+          path: ${{ needs.infos.outputs.package-path }}
+
+  release:
+    needs:
+      - infos
+      - build
+    runs-on: ubuntu-latest
+    name: "🚀 Releasing"
+
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.infos.outputs.artifact-name }}
+          path: ${{ needs.infos.outputs.artifact-dir }}
+
+      - name: Prepare Zip Build
+        working-directory: ${{ needs.infos.outputs.artifact-dir }}
+        run: |
+          zip -r ${{ needs.infos.outputs.artifact-name }}.zip ./
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ needs.infos.outputs.tag-name }}
+          release_name: ${{ needs.infos.outputs.release-name }}
+          draft: false
+          prerelease: ${{ needs.infos.outputs.publish == 'false' }}
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ needs.infos.outputs.artifact-dir }}/${{ needs.infos.outputs.artifact-name }}.zip
+          asset_name: ${{ needs.infos.outputs.release-asset-name }}.zip
+          asset_content_type: application/zip
+
+  publish:
+    needs:
+      - infos
+      - build
+
+    runs-on: ubuntu-latest
+    name: "📦 Publishing"
+    if: ${{ needs.infos.outputs.publish == 'true' || github.event_name == 'push' }}
+
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.infos.outputs.artifact-name }}
+          path: ${{ needs.infos.outputs.artifact-dir }}
+
+      - name: Upload Library to Package Registry
+        working-directory: ${{ needs.infos.outputs.artifact-dir }}
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: |
+          npm publish

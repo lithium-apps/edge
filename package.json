@@ -1,0 +1,31 @@
+{
+  "name": "@lithium-apps/edge",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "keywords": ["nestjs", "edge.js", "edge", "typescript", "node.js"],
+  "author": "Kylian Mallet",
+  "license": "ISC",
+  "devDependencies": {
+    "@nestjs/common": "^10.3.8",
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.3.8"
+  },
+  "dependencies": {
+    "edge.js": "^6.0.2"
+  },
+  "repository": {
+        "type": "git",
+        "url": "https://github.com/lithium-apps/edge"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    }
+}
