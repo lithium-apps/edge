@@ -1,5 +1,5 @@
 import { EdgeModule } from "./edge.module";
-import { EdgeService } from "src/edge.service";
+import { EdgeService } from "./edge.service";
 import { Render } from "./edge.decorator";
 import { EdgeConfig, MountOptions, EdgePlugin, EdgeTag, EdgeTemplate, EdgePluginEntrypoint } from "./edge.types";
 
