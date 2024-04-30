@@ -2,13 +2,19 @@
   "name": "@lithium-apps/edge",
   "version": "1.0.0",
   "description": "A NestJS module to use Edge.JS templating language.",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf node_modules"
   },
-  "keywords": ["nestjs", "edge.js", "edge", "typescript", "node.js"],
+  "keywords": [
+    "nestjs",
+    "edge.js",
+    "edge",
+    "typescript",
+    "node.js"
+  ],
   "author": "Kylian Mallet",
   "license": "ISC",
   "devDependencies": {
@@ -23,10 +29,10 @@
     "edge.js": "^6.0.2"
   },
   "repository": {
-        "type": "git",
-        "url": "https://github.com/lithium-apps/edge"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com"
-    }
+    "type": "git",
+    "url": "git+https://github.com/lithium-apps/edge.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
 }
