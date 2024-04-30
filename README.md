@@ -158,9 +158,9 @@ For now the package isn't published to npm, but you can install it from the GitH
     }
     ```
 
-<!-- UTILS LINKS -->
+<!-- USEFUL LINKS -->
 
-## Utils links
+## Useful links
 
 Here are a few useful links to help you use the module or learn more about it! Don't thank us, you'll sleep better :)
 
