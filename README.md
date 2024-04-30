@@ -4,6 +4,8 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
+[![License][license-shield]][license-url]
+[![GitHub Build][github-build]][github-build-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -15,7 +17,7 @@
   <h3 align="center">@lithium/edge</h3>
 
   <p align="center">
-    A NestJS module to use Edge.JS templating language.
+    A NestJS module to use EdgeJS templating language.
     <br />
     <br />
     <a href="https://github.com/lithium-apps/edge/issues/new?labels=enhancement">Request Feature</a>
@@ -53,7 +55,7 @@
 
 ## About the project
 
-The Edge module is based on the idea of using Edge.JS templating within a Nest application. The main problem with using Edge.JS within Nest comes from the resolution of Edge in ESM. In this case, we're using a workaround to make use of the dynamic import.
+The Edge module is based on the idea of using [EdgeJS][EdgeJS-url] templating within a [NestJS][NestJS-url] application. The main problem with using EdgeJS within Nest comes from the resolution of Edge in ESM. In this case, we're using a workaround to make use of the dynamic import.
 
 This module is built dynamically, allowing you to define a customized configuration for each use case. We recommend that you create a dedicated custom configuration file by importing a configuration object such as `edge.config.ts`.
 
@@ -162,8 +164,8 @@ For now the package isn't published to npm, but you can install it from the GitH
 
 Here are a few useful links to help you use the module or learn more about it! Don't thank us, you'll sleep better :)
 
--   [Edge.JS documentation](https://edgejs.dev/docs/introduction): The official documentation of the Edge.JS templating language.
--   [NestJS documentation](https://docs.nestjs.com/): The official documentation of the NestJS framework.
+-   [Edge.JS documentation][EdgeJS-url]: The official documentation of the Edge.JS templating language.
+-   [NestJS documentation][NestJS-url]: The official documentation of the NestJS framework.
 
 <!-- CONTACT -->
 
@@ -185,7 +187,9 @@ Here are a few useful links to help you use the module or learn more about it! D
 [issues-shield]: https://img.shields.io/github/issues/lithium-apps/edge.svg?style=for-the-badge
 [issues-url]: https://github.com/lithium-apps/edge/issues
 [license-shield]: https://img.shields.io/github/license/lithium-apps/edge.svg?style=for-the-badge
-[license-url]: https://github.com/lithium-apps/edge/blob/master/LICENSE.txt
+[license-url]: https://github.com/lithium-apps/edge/blob/main/LICENSE.md
+[github-build]: https://img.shields.io/github/actions/workflow/status/lithium-apps/edge/brp-packages.yaml?branch=main&style=for-the-badge
+[github-build-url]: https://github.com/lithium-apps/edge/actions/workflows/brp-packages.yaml
 
 [NestJS]: https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=fff&style=for-the-badge
 [NestJS-url]: https://nestjs.com/
