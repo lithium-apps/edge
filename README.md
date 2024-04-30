@@ -11,7 +11,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/lithium_apps/edge">
-    <img src=".github/assets/lithium_logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/lithium-apps/edge/blob/17698abfaff0881a5100a8a450af2e70564c34aa/.github/assets/lithium_logo.png?raw=true" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">@lithium/edge</h3>
@@ -195,5 +195,5 @@ Here are a few useful links to help you use the module or learn more about it! D
 [NestJS-url]: https://nestjs.com/
 [TypeScript]: https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
 [TypeScript-url]: https://www.typescriptlang.org/
-[EdgeJS]: .github/assets/edgejs_badge.svg
+[EdgeJS]: https://raw.githubusercontent.com/lithium-apps/edge/main/.github/assets/edgejs_badge.svg
 [EdgeJS-url]: https://edgejs.dev/docs/introduction
