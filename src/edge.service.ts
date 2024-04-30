@@ -95,14 +95,14 @@ export class EdgeService {
         return this;
     }
 
-    registerTag(name: string, handler: any) {
-        this.edge.tag(name, handler);
+    registerTag(tag: EdgeTag) {
+        this.edge.registerTag(tag);
         return this;
     }
 
     registerTags(tags: EdgeTag[]) {
         for (const tag of tags) {
-            this.registerTag(tag.name, tag.boot);
+            this.registerTag(tag);
         }
 
         return this;

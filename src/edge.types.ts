@@ -24,8 +24,11 @@ export interface EdgePlugin {
 export type EdgePluginEntrypoint = (edge: EdgeService, firstRun: boolean, options?: Record<string, any>) => void;
 
 export interface EdgeTag {
-    name: string;
-    boot: Record<string, any>
+    block: boolean;
+    seekable: boolean;
+    tagName: string;
+
+    compile(parser: any, buffer: any, token: any): void;
 }
 
 export interface EdgeTemplate {
